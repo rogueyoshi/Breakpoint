@@ -2,7 +2,7 @@
 A macro to help with action breakpoint issues in Path of Exile.
 
 # Releases
-https://github.com/rogueyoshi/Breakpoint/Releases
+https://github.com/rogueyoshi/Breakpoint/releases
 
 # Usage
 Open settings.ini and do the following":
