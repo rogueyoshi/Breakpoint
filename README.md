@@ -1,5 +1,5 @@
 # Breakpoint
-A macro to help with action breakpoint issues in Path of Exile.
+A macro to help with action breakpoint issues in Path of Exile. It work's by disabling the OS's built-in key-repeat and using it's own.
 
 # Releases
 https://github.com/rogueyoshi/Breakpoint/releases
