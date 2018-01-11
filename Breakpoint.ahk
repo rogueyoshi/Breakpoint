@@ -7,7 +7,7 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 SetKeyDelay, 0
 
 ; Initialize program variables.
-Keys         := ["q", "w", "e", "r", "t", "y"]
+Keys         := ["q", "w", "e", "r", "t"]
 PressDuration = 125 ; Should be between 1-125
 WaitDuration  = 150 ; Should be no more than 275-PressDuration
 
@@ -23,9 +23,9 @@ if (SettingsKeys = "Error" or SettingsPressDuration = "Error" or SettingsWaitDur
 	; Write default Settings.ini.
 	SettingsKeys := []
 	
-	for Key in Keys
+	for index, element in Keys
 	{
-		SettingsKeys .= Key ","
+		SettingsKeys .= element ","
 	}
 	SettingsPressDuration = %PressDuration%
 	SettingsWaitDuration  = %WaitDuration%
