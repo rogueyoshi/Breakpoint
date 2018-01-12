@@ -8,15 +8,13 @@ SetKeyDelay, 0
 
 ; Initialize program variables.
 Keys         := ["q", "w", "e", "r", "t"]
-PressDuration = 125 ; Should be between 1-125
-WaitDuration  = 150 ; Should be no more than 275-PressDuration
+SleepDuration  = 275 ; Should be no more than 275-PressDuration
 
 ; Start reading Settings.ini.
 SettingsFile = settings.ini
 
 IniRead, SettingsKeys,          %SettingsFile%, Settings, Keys,          Error
-IniRead, SettingsPressDuration, %SettingsFile%, Settings, PressDuration, Error
-IniRead, SettingsWaitDuration,  %SettingsFile%, Settings, WaitDuration,  Error
+IniRead, SettingsSleepDuration,  %SettingsFile%, Settings, SleepDuration,  Error
 
 if (SettingsKeys = "Error" or SettingsPressDuration = "Error" or SettingsWaitDuration = "Error")
 {
@@ -28,23 +26,22 @@ if (SettingsKeys = "Error" or SettingsPressDuration = "Error" or SettingsWaitDur
 		SettingsKeys .= element ","
 	}
 	SettingsPressDuration = %PressDuration%
-	SettingsWaitDuration  = %WaitDuration%
+	SettingsSleepDuration  = %SleepDuration%
 	
 	IniWrite, % RTrim(SettingsKeys, ","), %SettingsFile%, Settings, Keys
-	IniWrite, %SettingsPressDuration%,    %SettingsFile%, Settings, PressDuration
-	IniWrite, %SettingsWaitDuration%,     %SettingsFile%, Settings, WaitDuration
+	IniWrite, %SettingsSleepDuration%,     %SettingsFile%, Settings, SleepDuration
 }
 else
 {
 	Keys         := StrSplit(SettingsKeys, ",")
-	PressDuration = %SettingsPressDuration%
-	WaitDuration  = %SettingsWaitDuration%
+	SleepDuration  = %SettingsSleepDuration%
 }
 
 ; Set hotkeys.
 for index, element in Keys
 {
-	Hotkey, *%element%, Macro, Off
+	Hotkey, $%element%, Macro, Off
+	Hotkey, $+%element%, Macro, Off
 }
 
 Active = 0
@@ -57,7 +54,8 @@ Loop
 		{
 			for index, element in Keys
 			{
-				Hotkey, *%element%, On
+				Hotkey, $%element%, On
+				Hotkey, $+%element%, On
 			}
 			
 			Active = 1
@@ -70,7 +68,8 @@ Loop
 		{
 			for index, element in Keys
 			{
-				Hotkey, *%element%, Off
+				Hotkey, $%element%, Off
+				Hotkey, $+%element%, Off
 			}
 
 			Active = 0
@@ -80,9 +79,12 @@ Return
 
 ; Hotkey function.
 Macro:
-	StringReplace, ThisHotkey, A_ThisHotkey, *
-	Send {%ThisHotkey% DOWN}
-	Sleep %PressDuration%
-	Send {%ThisHotkey% UP}
-	Sleep %WaitDuration%
+	; Prepare key for sending
+	StringReplace, ThisHotkey, A_ThisHotkey, $
+	
+	; Press key
+	Send %ThisHotkey%
+	
+	; Sleep for duration
+	Sleep %SleepDuration%	
 Return
