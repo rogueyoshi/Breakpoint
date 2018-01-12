@@ -42,9 +42,9 @@ else
 }
 
 ; Set hotkeys.
-for index, element in Keys ; Enumeration is the recommended approach in most cases.
+for index, element in Keys
 {
-	Hotkey, $%element%, Macro, Off
+	Hotkey, *%element%, Macro, Off
 }
 
 Active = 0
@@ -57,7 +57,7 @@ Loop
 		{
 			for index, element in Keys
 			{
-				Hotkey, $%element%, On
+				Hotkey, *%element%, On
 			}
 			
 			Active = 1
@@ -70,7 +70,7 @@ Loop
 		{
 			for index, element in Keys
 			{
-				Hotkey, $%element%, Off
+				Hotkey, *%element%, Off
 			}
 
 			Active = 0
@@ -80,7 +80,7 @@ Return
 
 ; Hotkey function.
 Macro:
-	StringReplace, ThisHotkey, A_ThisHotkey, $
+	StringReplace, ThisHotkey, A_ThisHotkey, *
 	Send {%ThisHotkey% DOWN}
 	Sleep %PressDuration%
 	Send {%ThisHotkey% UP}
