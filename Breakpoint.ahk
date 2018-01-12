@@ -37,8 +37,8 @@ if (SettingsKeys = "Error" or SettingsPressDuration = "Error" or SettingsWaitDur
 else
 {
 	Keys         := StrSplit(SettingsKeys, ",")
-	PressDuration = SettingsPressDuration
-	WaitDuration  = SettingsWaitDuration
+	PressDuration = %SettingsPressDuration%
+	WaitDuration  = %SettingsWaitDuration%
 }
 
 ; Set hotkeys.
