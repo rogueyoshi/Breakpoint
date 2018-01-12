@@ -13,7 +13,7 @@ Example: "Keys=q,w,e" for "Q", "W", and "E".
 
 2. Set "PressDuration=" to a value that allows it to deterministically activate your skill key.
 
-3. Set "WaitDuration=" to value that is around the total milliseconds of your Breakpoint, minus the PressDuration (plus a leeway of about 25ms for server ticks).
+3. Set "Delay=" to value that is around the total milliseconds of your Breakpoint, plus the time in milliseconds of an average in-game frame.
 
 
 Then simply run the script (.exe or .ahk).
