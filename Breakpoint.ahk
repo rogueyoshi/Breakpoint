@@ -3,39 +3,43 @@
 SendMode Input  ; Recommended for new scripts due to its superior speed and reliability.
 SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 
-; Initialize AHK settings.
-SetKeyDelay, 0
-
 ; Initialize program variables.
 Keys         := ["q", "w", "e", "r", "t"]
-SleepDuration  = 275 ; Should be no more than 275-PressDuration
+Delay         = 250 ; Should be no more than 1/4 of the breakpoint
+PressDuration := (1000 / 60) ; Should be at least 1 frame in MS
 
-; Start reading Settings.ini.
+; Start reading settings.ini.
 SettingsFile = settings.ini
 
 IniRead, SettingsKeys,          %SettingsFile%, Settings, Keys,          Error
-IniRead, SettingsSleepDuration,  %SettingsFile%, Settings, SleepDuration,  Error
+IniRead, SettingsDelay,         %SettingsFile%, Settings, Delay,         Error
+IniRead, SettingsPressDuration, %SettingsFile%, Settings, PressDuration, Error
 
-if (SettingsKeys = "Error" or SettingsPressDuration = "Error" or SettingsWaitDuration = "Error")
+if (SettingsKeys = "Error" or SettingsDelay = "Error" or SettingsPressDuration = "Error")
 {
-	; Write default Settings.ini.
+	; Write default settings.ini.
 	SettingsKeys := []
 	
 	for index, element in Keys
 	{
 		SettingsKeys .= element ","
 	}
+	SettingsDelay         = %Delay%
 	SettingsPressDuration = %PressDuration%
-	SettingsSleepDuration  = %SleepDuration%
 	
 	IniWrite, % RTrim(SettingsKeys, ","), %SettingsFile%, Settings, Keys
-	IniWrite, %SettingsSleepDuration%,     %SettingsFile%, Settings, SleepDuration
+	IniWrite, %SettingsDelay%,            %SettingsFile%, Settings, Delay
+	IniWrite, %SettingsPressDuration%,    %SettingsFile%, Settings, PressDuration
 }
 else
 {
 	Keys         := StrSplit(SettingsKeys, ",")
-	SleepDuration  = %SettingsSleepDuration%
+	Delay         = %SettingsDelay%
+	PressDuration = %SettingsPressDuration%
 }
+
+; Initialize AHK settings.
+SetKeyDelay, %Delay%, %PressDuration%
 
 ; Set hotkeys.
 for index, element in Keys
@@ -79,12 +83,12 @@ Return
 
 ; Hotkey function.
 Macro:
-	; Prepare key for sending
 	StringReplace, ThisHotkey, A_ThisHotkey, $
 	
 	; Press key
-	Send %ThisHotkey%
-	
-	; Sleep for duration
-	Sleep %SleepDuration%	
+	;Send %ThisHotkey%
+	Send {%ThisHotkey% DOWN}
+	Sleep %A_KeyDuration%
+	Send {%ThisHotkey% UP}
+	Sleep (%A_KeyDelay% - %A_KeyDuration%)
 Return
